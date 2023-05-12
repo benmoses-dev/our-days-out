@@ -1,4 +1,7 @@
 {
+    "name": "our-days-out",
+    "version": "0.0.1",
+    "description": "App for organising days out with your family",
     "private": true,
     "scripts": {
         "dev": "vite",
