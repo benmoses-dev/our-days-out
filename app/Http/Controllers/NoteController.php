@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Item;
+use App\Models\Note;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
-class ItemController extends Controller
+class NoteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) : View
+    public function index() : View
     {
-        // Show all items saved for the user
-        $items = $request->user()->items()->get();
-        return view('items.index', ['items' => $items]);
+        // Show all notes
+        $notes = ['notes' => Note::with('user')
+            ->latest()
+            ->get()
+        ];
+        return view('notes.index', $notes);
     }
 
     /**
@@ -24,8 +27,8 @@ class ItemController extends Controller
      */
     public function create() : View
     {
-        // Form for creating a new item
-        return view('items.create');
+        // Form for creating a new note
+        return view('notes.create');
     }
 
     /**
@@ -33,19 +36,19 @@ class ItemController extends Controller
      */
     public function store(Request $request) : RedirectResponse
     {
-        // Store the item in the database
+        // Store the note in the database
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:50'],
+            'title' => ['required', 'string', 'max:50'],
             'description' => ['required', 'string', 'max:500'],
         ]);
-        $request->user()->items()->create($validated);
-        return redirect(route('items.index'));
+        $request->user()->notes()->create($validated);
+        return redirect(route('notes.index'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Item $item)
+    public function show(Note $note)
     {
         //
     }
@@ -53,7 +56,7 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Item $item)
+    public function edit(Note $note)
     {
         //
     }
@@ -61,7 +64,7 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Item $item)
+    public function update(Request $request, Note $note)
     {
         //
     }
@@ -69,7 +72,7 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Item $item)
+    public function destroy(Note $note)
     {
         //
     }
